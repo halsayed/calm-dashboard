@@ -4,7 +4,6 @@ from wtforms.fields.core import UnboundField
 from . import blueprint
 from .utils import list_deployed_vms, get_vm_details
 
-
 @blueprint.route('/')
 @login_required
 def index():
