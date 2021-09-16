@@ -20,6 +20,19 @@
         </div>
     </div>
 
+    <div class="card border-light shadow-sm">
+    <div class="card-header">
+            <div class="row align-items-center">
+                <div class="row">
+                    <div class="h6">Console</div>
+                </div>
+                <div class="ratio ratio-4x3">
+                    <iframe src="{{ url_for('vms.console', vm_uuid=vm_uuid) }}"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->

@@ -1,0 +1,19 @@
+version: "3.3"
+
+services:
+  nginx:
+    image: nginx
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ${PWD}/nginx:/etc/nginx/templates
+    environment:
+      - PRISM_HOST=${PRISM_HOST}
+      - PRISM_PORT=${PRISM_PORT}
+  dashboard:
+    build: .
+    restart: always
+    environment:
+      - PRISM_HOST=${PRISM_HOST}
+      - PRISM_PORT=${PRISM_PORT}

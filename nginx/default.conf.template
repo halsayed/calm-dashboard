@@ -1,0 +1,20 @@
+server {
+    listen 8080;
+
+    location ~ ^/(console/lib/noVNC|vnc/vm|api/nutanix/v3/vms|api/nutanix/v3/users)/ {
+        if ($http_cookie !~* "NTNX_IGW_SESSION") {
+            return 301 https://$host:$server_port/;
+        }
+        proxy_pass https://${PRISM_HOST}:${PRISM_PORT};
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+    }
+
+    location / {
+        proxy_pass http://dashboard:8080/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host:$server_port;
+    }
+}
