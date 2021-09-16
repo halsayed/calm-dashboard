@@ -10,7 +10,7 @@ from constants import NTNX_COOKIE
 @login_required
 def index():
     deployed_vms = list_deployed_vms(current_user)
-    return render_template('vms/index.html', segment=['vms'], vms=deployed_vms)
+    return render_template('vms/index.html', segment=['virtual_machines'], vms=deployed_vms)
 
 
 @blueprint.route('/details', methods=['GET'])
@@ -19,7 +19,7 @@ def details():
     vmuuid = request.args.get('vm_uuid')
     vm_details = get_vm_details(vmuuid, current_user)
     #return str(vm_details)
-    return render_template('vms/details.html', segment=['vms'], vm_details=vm_details, vm_uuid=vmuuid)
+    return render_template('vms/details.html', segment=['virtual_machines'], vm_details=vm_details, vm_uuid=vmuuid)
 
 
 @blueprint.route('/console/<vm_uuid>', methods=['GET'])
