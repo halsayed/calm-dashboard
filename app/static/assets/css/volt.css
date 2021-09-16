@@ -803,7 +803,8 @@
   --bs-gray-900-rgb: 17, 24, 39;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 17, 24, 39;
-  --bs-body-rgb: 55, 65, 81;
+  --bs-body-color-rgb: 55, 65, 81;
+  --bs-body-bg-rgb: 242, 244, 246;
   --bs-font-sans-serif: "Inter", sans-serif;
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
@@ -9103,7 +9104,7 @@ textarea.form-control-lg {
 
 .text-body {
   --bs-text-opacity: 1;
-  color: rgba(var(--bs-body-rgb), var(--bs-text-opacity)) !important; }
+  color: rgba(var(--bs-body-color-rgb), var(--bs-text-opacity)) !important; }
 
 .text-muted {
   --bs-text-opacity: 1;
@@ -9227,7 +9228,7 @@ textarea.form-control-lg {
 
 .bg-body {
   --bs-bg-opacity: 1;
-  background-color: rgba(var(--bs-body-rgb), var(--bs-bg-opacity)) !important; }
+  background-color: rgba(var(--bs-body-bg-rgb), var(--bs-bg-opacity)) !important; }
 
 .bg-transparent {
   --bs-bg-opacity: 1;
@@ -19063,3 +19064,4 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
 .datepicker-dropdown {
   z-index: 9999; }
 
+/*# sourceMappingURL=volt.css.map */
