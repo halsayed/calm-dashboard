@@ -25,33 +25,3 @@ def list_deployed_apps(user: User) -> list:
 
     return apps
 
-def list_marketplace_items(user: User) -> list:
-    """
-    Returns a list of available Marketplace Items
-    :param user:
-    :return:
-    """
-    payload = {
-        'filter_criteria': 'marketplace_item_type_list==APP;(app_state==PUBLISHED)',
-        'entity_type': 'marketplace_item',
-        'group_member_attributes': [{'attribute': 'name'}]
-    }
-    r = user.api_post('groups', payload)
-    published_list = []
-    for entity_item in r.json()['group_results'][0]['entity_results']:
-        blueprint_name = ''
-        # check for name field
-        for field in entity_item['data']:
-            if field.get('name', None) == 'name':
-                blueprint_name = field['values'][0]['values'][0]
-
-        # check if the blueprint name is in the prefix list
-        #if blueprint_name[0] == '_':
-        #    blueprint_prefix = blueprint_name[1:blueprint_name.find('_', 1)]
-        #if blueprint_prefix in prefix_list:
-        published_list.append({ 'uuid': entity_item['entity_id'],
-                                'name': blueprint_name,
-                                'display_name': blueprint_name[blueprint_name.find('_', 1)+1:]
-                                })
-
-    return published_list 

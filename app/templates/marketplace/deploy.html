@@ -1,0 +1,45 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Setup Application {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="card border-light shadow-sm">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="h5">Customize Runtime Editables</div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <form method="POST">
+                <label for="app_name">Application Name:
+                    <input id="mpi_app_name" name="mpi_app_name" required>
+                </label>
+                <table class="table align-items-center table-flush">
+                    <tbody>
+                    {% for variable in runtime_editables %}
+                        <tr>
+                            <th scope="row">
+                                <label for="{{ variable.name }}">{{ variable.name }}:
+                                    <input id="{{ variable.name }}" name="{{ variable.name }}" value= {{ variable.value }}>
+                                </label>
+                            </th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <button type="reset">Reset</button>
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
