@@ -6,7 +6,7 @@
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-
+    {% if 'console' not in segment %}
     <div class="card border-light shadow-sm">
         <div class="card-header">
             <div class="row align-items-center">
@@ -19,9 +19,10 @@
             </div>
         </div>
     </div>
-
+    {% endif %}
+    {% if 'console' in segment %}
     <div class="card border-light shadow-sm">
-    <div class="card-header">
+        <div class="card-header">
             <div class="row align-items-center">
                 <div class="row">
                     <div class="h6">Console</div>
@@ -32,7 +33,7 @@
             </div>
         </div>
     </div>
-
+    {% endif %}
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
