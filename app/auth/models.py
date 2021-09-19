@@ -6,7 +6,7 @@ from urllib.parse import urljoin
 
 from constants import NTNX_COOKIE
 from app import db, login_manager
-from .helpers import extract_cookie_details, expand_project_name
+from .helpers import extract_cookie_details, expand_project_name, map_prism_role
 
 
 class User(db.Model, UserMixin):
@@ -23,6 +23,9 @@ class User(db.Model, UserMixin):
     project = db.Column(db.String)
     project_code = db.Column(db.String)
     project_uuid = db.Column(db.String(36))
+    is_admin = db.Column(db.Boolean, default=False)
+    is_consumer = db.Column(db.Boolean, default=False)
+    is_operator = db.Column(db.Boolean, default=True)
 
     def __init__(self, uuid: str, username: str, cookie: str, expiry: datetime):
         """
@@ -40,7 +43,9 @@ class User(db.Model, UserMixin):
         self._populate_user_info()
 
     def __repr__(self):
-        return f'id:{self.uuid}, username: {self.username}'
+        return f'uuid:{self.uuid}, username: {self.username}, expiry: {self.expiry}, name: {self.name}, email: ' \
+               f'{self.email}, project[name, code, uuid]: {self.project} {self.project_code} {self.project_uuid} ' \
+               f'is_admin: {self.is_admin}, is_consumer: {self.is_consumer}, is_operator: {self.is_operator}'
 
     @property
     def is_authenticated(self):
@@ -104,6 +109,19 @@ class User(db.Model, UserMixin):
         if len(projects):
             self.project_code, self.project = expand_project_name(projects[0]['name'])
             self.project_uuid = projects[0]['uuid']
+
+        # check if the user has any roles and map Prism roles to (admin, superuser, viewer)
+        # TODO: clean up this section or move it
+        prism_role = None
+        for acp in resources.get('access_control_policy_reference_list', []):
+            r = self.api_get(f'access_control_policies/{acp["uuid"]}')
+            for context in r.json()['status']['resources']['filter_list']['context_list']:
+                for item in context.get('scope_filter_expression_list', []):
+                    if item.get('left_hand_side') == 'PROJECT':
+                        right_hand = item['right_hand_side']
+                        if self.project_uuid in right_hand.get('uuid_list', []):
+                            prism_role = r.json()['status']['resources']['role_reference']['name']
+        self.is_admin, self.is_consumer, self.is_operator = map_prism_role(prism_role)
 
         # TODO: query AD using default consume role fails in PC, need a workaround
         # # get extra fields from directory service (email and mobile)
