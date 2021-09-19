@@ -37,7 +37,13 @@
                             </svg>
                             <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
                             <span class="mb-0 font-small fw-bold text-gray-900">
-                                <strong>{{ current_user.name }}</strong>
+                                <strong>
+                                    {% if current_user.name %}
+                                        {{ current_user.name }}
+                                    {% else %}
+                                        {{ current_user.username }}
+                                    {% endif %}
+                                </strong>
                             </span>
                             </div>
                         </div>
