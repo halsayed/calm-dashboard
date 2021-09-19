@@ -24,3 +24,4 @@ def list_deployed_apps(user: User) -> list:
             })
 
     return apps
+

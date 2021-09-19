@@ -1,0 +1,46 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Marketplace {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="card border-light shadow-sm">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="h5">Available Items</div>
+                </div>
+                {% if mpi_list|length > 0 %}
+                    <div class="col text-end">
+                        Count: {{ mpi_list|length }}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-items-center table-flush">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">Name</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for mpi in mpi_list %}
+                    <tr>
+                        <th scope="row">
+                        <a href="/marketplace/deploy?mpi_uuid={{ mpi.uuid }}">{{ mpi.name }}</a></th>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}{% endblock javascripts %}
