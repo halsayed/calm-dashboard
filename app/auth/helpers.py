@@ -1,7 +1,7 @@
 from requests.cookies import RequestsCookieJar
 from datetime import datetime
 
-from constants import NTNX_COOKIE, UNDEFINED_PROJECT_CODE
+from constants import NTNX_COOKIE, UNDEFINED_PROJECT_CODE, PRISM_ROLE_MAPPING
 
 
 def extract_cookie_details(cookies: RequestsCookieJar) -> (str, datetime):
@@ -38,4 +38,19 @@ def expand_project_name(project_name: str) -> (str, str):
         name = project_name
 
     return code, name
+
+
+def map_prism_role(prism_role: str) -> (bool, bool, bool):
+    """
+    Maps Prism assigned roles to dashboard roles (admin, consumer, operator)
+    :param prism_role: Prism role name
+    :return: (is_admin, is_consumer, is_operator)
+    """
+    mapped_role = PRISM_ROLE_MAPPING.get(prism_role)
+    if mapped_role == 'admin':
+        return True, False, False
+    elif mapped_role == 'consumer':
+        return False, True, False
+    else:
+        return False, False, True
 
