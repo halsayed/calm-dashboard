@@ -23,6 +23,7 @@ def login():
         if auth_result:
             user = update_user_authentication(**auth_result)
             current_app.logger.info(f'{username} authenticated successfully')
+            current_app.logger.debug(user)
             return redirect(url_for('dashboard.index'))
         else:
             current_app.logger.info(f'{username} authentication failed!')
