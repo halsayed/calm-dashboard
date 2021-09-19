@@ -28,6 +28,7 @@
                     <span class="sidebar-text">Networks</span>
                 </a>
             </li>
+            {% if current_user.is_admin %}
             <li class="nav-item {% if 'users' in segment %} active {% endif %}">
                 <a href="/settings.html" class="nav-link">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="icon icon-xs me-2" viewBox="0 0 20 20">
@@ -36,6 +37,7 @@
                     <span class="sidebar-text">Users</span>
                 </a>
             </li>
+            {% endif %}
             <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
             <li class="nav-item">
                 <a href="https://appseed.us/admin-dashboards/flask-dashboard-volt" target="_blank"
