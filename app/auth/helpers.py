@@ -48,9 +48,9 @@ def map_prism_role(prism_role: str) -> (bool, bool, bool):
     """
     mapped_role = PRISM_ROLE_MAPPING.get(prism_role)
     if mapped_role == 'admin':
-        return True, False, False
+        return True, True, True
     elif mapped_role == 'consumer':
-        return False, True, False
+        return False, True, True
     else:
         return False, False, True
 
