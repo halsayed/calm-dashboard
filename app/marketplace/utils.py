@@ -91,15 +91,19 @@ def launch_mpi(mpi_uuid, app_name, runtime_editables,  user: User):
     payload['spec']['app_profile_reference'] = {'kind': 'app_profile', 'uuid':payload['spec']['resources']['app_profile_list'][0]['uuid']}
     ##edit Variables if needed
     editables = payload['spec']['resources']['app_profile_list'][0]['variable_list']
+    current_app.logger.debug('runtime_editables from View (AA): {}'.format(runtime_editables))
     current_app.logger.debug('launch mpi editables (AA): {}'.format(editables))
     
 
-    for variable in editables:
-        if variable['name'] in runtime_editables:
-            variable['value'] = entry[variable['name']]
-    
-    current_app.logger.debug('finished editables={}'.format(editables))
-    payload['spec']['resources']['app_profile_list'][0]['variable_list'] = editables
+    new_editables = []
+    for var1 in editables:
+        for var2 in runtime_editables:
+            if var1['name'] in var2:
+                var1['value']=var2[var1['name']]
+            new_editables.append(var1)
+            
+    current_app.logger.debug('finished editables={}'.format(new_editables))
+    payload['spec']['resources']['app_profile_list'][0]['variable_list'] = new_editables
 
     r = user.api_post('blueprints/{}/launch'.format(bp_uuid),payload)
     response = r.json()

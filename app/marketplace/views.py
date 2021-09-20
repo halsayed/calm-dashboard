@@ -26,6 +26,7 @@ def deploy():
                     runtime_editables.append({
                         key: value
                     })
+        current_app.logger.debug('runtime_editables finished: {}'.format(runtime_editables))
         mpi_uuid = request.args.get('mpi_uuid')
         pending_launch = launch_mpi(mpi_uuid, app_name, runtime_editables,current_user)
         return redirect('/')
