@@ -37,7 +37,6 @@ def list_marketplace_items(user: User) -> list:
 def get_runtime_editables(mpi_uuid, user: User):
     r = user.api_get('calm_marketplace_items/{}'.format(mpi_uuid))
     data = r.json()['spec']['resources']['app_blueprint_template']['status']['resources']['app_profile_list'][0]['variable_list']
-    current_app.logger.debug('get runtime editables (AA): {}'.format(data))
     runtime_editables =[]
     for variable in data:
         runtime_editables.append({
@@ -49,7 +48,6 @@ def get_runtime_editables(mpi_uuid, user: User):
 
 def launch_mpi(mpi_uuid, app_name, runtime_editables,  user: User):
     bp_spec = {}
-    current_app.logger.debug('launch_mpi:mpi_uuid={}'.format(mpi_uuid))
     ## ToDo: Actual Deployment will always be in first assigned Project (if multiple)
     payload = {
         'kind': 'project'
@@ -89,12 +87,8 @@ def launch_mpi(mpi_uuid, app_name, runtime_editables,  user: User):
     del payload['status']
     payload['spec']['application_name'] = app_name
     payload['spec']['app_profile_reference'] = {'kind': 'app_profile', 'uuid':payload['spec']['resources']['app_profile_list'][0]['uuid']}
-    ##edit Variables if needed
-    editables = payload['spec']['resources']['app_profile_list'][0]['variable_list']
-    current_app.logger.debug('runtime_editables from View (AA): {}'.format(runtime_editables))
-    current_app.logger.debug('launch mpi editables (AA): {}'.format(editables))
     
-
+    editables = payload['spec']['resources']['app_profile_list'][0]['variable_list']
     new_editables = []
     for var1 in editables:
         for var2 in runtime_editables:
@@ -102,7 +96,6 @@ def launch_mpi(mpi_uuid, app_name, runtime_editables,  user: User):
                 var1['value']=var2[var1['name']]
             new_editables.append(var1)
             
-    current_app.logger.debug('finished editables={}'.format(new_editables))
     payload['spec']['resources']['app_profile_list'][0]['variable_list'] = new_editables
 
     r = user.api_post('blueprints/{}/launch'.format(bp_uuid),payload)

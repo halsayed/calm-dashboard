@@ -22,11 +22,9 @@ def deploy():
         for key in f.keys():
             if key != 'mpi_app_name':
                 for value in f.getlist(key):
-                    current_app.logger.debug('Filling runtime_editables {0}:{1}'.format(key,value))
                     runtime_editables.append({
                         key: value
                     })
-        current_app.logger.debug('runtime_editables finished: {}'.format(runtime_editables))
         mpi_uuid = request.args.get('mpi_uuid')
         pending_launch = launch_mpi(mpi_uuid, app_name, runtime_editables,current_user)
         return redirect('/')
