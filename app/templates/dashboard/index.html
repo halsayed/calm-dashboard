@@ -72,6 +72,59 @@
             </table>
         </div>
     </div>
+    {% if usage.enabled=='true' %}
+    <div class="card border-light shadow-sm">
+        <div class="card-header">
+            <div class="row align-items-center">
+                <div class="col">
+                    <div class="h5">
+                        Resource Usage
+                    </div>
+                    
+                    <div class="container">
+                        <div class="d-flex justify-content-between">
+                            <div></div>
+                            <div>max vCPU: {{ usage.reserved_vcpu }} vCPU</div>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{usage.utilized_vcpu_percentage}}"
+                            aria-valuemin="0" aria-valuemax="100" style="width:{{usage.utilized_vcpu_percentage}}%">
+                                {{ usage.utilized_vcpu }} vCPU
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="container">
+                        <div class="d-flex justify-content-between">
+                            <div></div>
+                            <div>max Memory: {{ usage.reserved_memory }} GB</div>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{usage.utilized_memory_percentage}}"
+                            aria-valuemin="0" aria-valuemax="100" style="width:{{usage.utilized_memory_percentage}}%">
+                                {{ usage.utilized_memory }} GB
+                            </div>
+                            </div>
+                    </div>
+                    <div class="container">
+                        <div class="d-flex justify-content-between">
+                            <div></div>
+                            <div>max Storage: {{ usage.reserved_disk }} GB</div>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{usage.utilized_disk_percentage}}"
+                            aria-valuemin="0" aria-valuemax="100" style="width:{{usage.utilized_disk_percentage}}%">
+                                {{ usage.utilized_disk }} GB
+                            </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
 
 {% endblock content %}
 
