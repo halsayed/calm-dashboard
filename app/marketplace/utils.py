@@ -34,30 +34,60 @@ def list_marketplace_items(user: User) -> list:
 
     return published_list 
 
+def get_environment_list(user: User):
+    """
+    Returns a list of available Environments assigned to the Project
+    :param user:
+    :return:
+    """
+
+    # Get reference_environment_list from Projects
+    r = user.api_get('projects/{}'.format(user.project_uuid))
+    env_uuids = []
+    envs = r.json()['status']['resources']['environment_reference_list']
+    for env in envs:
+        env_uuids.append({
+            'name':'',
+            'uuid':env['uuid']
+        })
+    
+    # environment_name is not mandantory and filled in reference_list so fetching from Env directly
+    environment_list = []
+    for env in env_uuids:
+        r = user.api_get('environments/{}'.format(env['uuid']))
+        environment_details=r.json()['status']
+        environment_list.append({
+            'name':environment_details['name'],
+            'uuid':env['uuid']
+        })
+
+    return environment_list
+
 def get_runtime_editables(mpi_uuid, user: User):
+    """
+    Returns a list of runtime_editable_variables for the selected marketplace_item
+    :param user:
+    :return:
+    """    
+
     r = user.api_get('calm_marketplace_items/{}'.format(mpi_uuid))
     data = r.json()['spec']['resources']['app_blueprint_template']['status']['resources']['app_profile_list'][0]['variable_list']
-    current_app.logger.debug('get runtime editables (AA): {}'.format(data))
+    current_app.logger.debug('get runtime editables: {}'.format(data))
     runtime_editables =[]
     for variable in data:
         runtime_editables.append({
             'name': variable['name'],
             'uuid': variable['uuid'],
-            'value': variable['value']
+            'value': variable['value'],
+            'is_mandatory':variable['is_mandatory'],
+            'type':variable['type']
         })
     return runtime_editables
 
-def launch_mpi(mpi_uuid, app_name, runtime_editables,  user: User):
+def launch_mpi(mpi_uuid, app_name, runtime_editables, env_uuid, user: User):
     bp_spec = {}
     current_app.logger.debug('launch_mpi:mpi_uuid={}'.format(mpi_uuid))
-    ## ToDo: Actual Deployment will always be in first assigned Project (if multiple)
-    payload = {
-        'kind': 'project'
-    }
-    r = user.api_post('projects/list', payload)
-    project_uuid = r.json()['entities'][0]['metadata']['uuid']
-    r = user.api_get('projects/{}'.format(project_uuid))
-    env_uuid = r.json()['status']['resources']['environment_reference_list'][0]['uuid']
+    ## ToDo: Default Project to be set in User-Settings
     r = user.api_get('calm_marketplace_items/{}'.format(mpi_uuid))
     data = r.json()
     mpi_name = data['status']['name']
@@ -72,7 +102,7 @@ def launch_mpi(mpi_uuid, app_name, runtime_editables,  user: User):
         "kind": "blueprint",
         "project_reference": {
             "kind": "project",
-            "uuid": project_uuid
+            "uuid": user.project_uuid
         },
         "categories": data["metadata"]["categories"]
     }
