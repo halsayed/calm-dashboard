@@ -1,7 +1,6 @@
 from app.auth.models import User
 import uuid
 import re
-from flask import current_app
 
 def list_marketplace_items(user: User) -> list:
     """

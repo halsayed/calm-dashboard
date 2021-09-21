@@ -4,7 +4,6 @@ from werkzeug.utils import redirect
 from wtforms.fields.core import UnboundField
 from . import blueprint
 from .utils import launch_mpi, list_marketplace_items, get_runtime_editables
-from flask import current_app
 
 @blueprint.route('/')
 @login_required

@@ -4,7 +4,6 @@ from flask_login import current_user
 from . import blueprint
 from .forms import LoginForm
 from .utils import authenticate, update_user_authentication, delete_user
-from .models import User
 
 
 @blueprint.route('/')
