@@ -15,26 +15,35 @@
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
+        <div class="mb-3">
             <form method="POST">
-                <label for="app_name">Application Name:
-                    <input id="mpi_app_name" name="mpi_app_name" required>
-                </label>
-                <table class="table align-items-center table-flush">
-                    <tbody>
-                    {% for variable in runtime_editables %}
-                        <tr>
-                            <th scope="row">
-                                <label for="{{ variable.name }}">{{ variable.name }}:
-                                    <input id="{{ variable.name }}" name="{{ variable.name }}" value= {{ variable.value }}>
-                                </label>
-                            </th>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-                <button type="reset">Reset</button>
-                <button type="submit">Submit</button>
+                <div class="input-group input-group-sm mb-3">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Application Name</span>
+                    <input type="text" id="mpi_app_name" name="mpi_app_name" required class="form-control" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="mpi_env">Environment</label>
+                    <select class="form-select" name="mpi_env" id="mpi_env">
+                        {% for env in mpi_environments %}
+                        <option value="{{ env.uuid}}">{{ env.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% for variable in runtime_editables %}
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">{{ variable.name }}</span>
+                        <input {% if variable.type=='SECRET' %} type="password" {% else %} type="text" {% endif %}
+                                {% if variable.is_mandatory %} required {% endif %}
+                                id="{{ variable.name }}" 
+                                name="{{ variable.name }}" 
+                                value="{{ variable.value }}" 
+                                class="form-control"
+                        >
+                    </div>
+                {% endfor %}
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">Deploy App</button>
+                </div>
             </form>
         </div>
     </div>
