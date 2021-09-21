@@ -48,16 +48,16 @@ def update_user_authentication(uuid: str, username: str, cookie: str, expiry: da
     :return:
     """
 
-    # delete any previous expired session records
-    users = User.query.filter_by(username=username)
-    for user in users:
-        if not user.is_authenticated:
-            db.session.delete(user)
-
-    user = User(uuid, username, cookie, expiry)
-    current_app.logger.info(f'adding {username}  to session db')
-    login_user(user, duration=user.expiry_timedelta)
-    db.session.add(user)
+    user = User.query.filter_by(username=username).first()
+    if user:
+        current_app.logger.info(f'{username} record already exists, updating cookie')
+        user.cookie = cookie
+        user.expiry = expiry
+    else:
+        user = User(uuid, username, cookie, expiry)
+        current_app.logger.info(f'{username} not in temp db, adding user')
+        login_user(user, duration=user.expiry_timedelta)
+        db.session.add(user)
 
     db.session.commit()
     return user

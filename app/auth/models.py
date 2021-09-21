@@ -1,5 +1,4 @@
 import requests
-from uuid import uuid4
 from datetime import datetime
 from flask import current_app
 from flask_login import UserMixin
@@ -13,9 +12,8 @@ from .helpers import extract_cookie_details, expand_project_name, map_prism_role
 class User(db.Model, UserMixin):
     __tablename__ = 'Users'
 
-    id = db.Column(db.String(36), primary_key=True)
-    uuid = db.Column(db.String(36))
-    username = db.Column(db.String(100))
+    uuid = db.Column(db.String(36), primary_key=True)
+    username = db.Column(db.String(100), unique=True)
     expiry = db.Column(db.DATETIME)
     cookie = db.Column(db.String)
     name = db.Column(db.String)
@@ -37,7 +35,6 @@ class User(db.Model, UserMixin):
         :param cookie:
         :param expiry:
         """
-        self.id = str(uuid4())
         self.uuid = uuid
         self.username = username
         self.cookie = cookie
@@ -64,7 +61,7 @@ class User(db.Model, UserMixin):
         return self.expiry - datetime.now()
 
     def get_id(self) -> str:
-        return self.id
+        return self.uuid
 
     def get_cookie(self) -> dict:
         return {NTNX_COOKIE: self.cookie}
@@ -138,8 +135,8 @@ class User(db.Model, UserMixin):
 
 
 @login_manager.user_loader
-def user_loader(session_id):
-    user = User.query.filter_by(id=session_id).first()
+def user_loader(uuid):
+    user = User.query.filter_by(uuid=uuid).first()
     if user and user.is_authenticated:
         return user
 
