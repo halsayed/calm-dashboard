@@ -42,7 +42,7 @@ def register_custom_error(app):
 
 
 def register_blueprints(app):
-    for module_name in ('auth', 'dashboard', 'vms', 'marketplace', 'users'):
+    for module_name in ('auth', 'dashboard','vms','marketplace'):
         module = import_module(f'app.{module_name}')
         app.register_blueprint(module.blueprint)
 
