@@ -87,7 +87,7 @@ def launch_mpi(mpi_uuid, app_name, runtime_editables,  user: User):
     del payload['status']
     payload['spec']['application_name'] = app_name
     payload['spec']['app_profile_reference'] = {'kind': 'app_profile', 'uuid':payload['spec']['resources']['app_profile_list'][0]['uuid']}
-    
+    ##edit Variables if needed
     editables = payload['spec']['resources']['app_profile_list'][0]['variable_list']
     new_editables = []
     for var1 in editables:
