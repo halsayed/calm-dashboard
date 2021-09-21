@@ -71,18 +71,31 @@ class User(db.Model, UserMixin):
         db.session.commit()
 
     def api_get(self, endpoint: str) -> requests:
+        current_app.logger.debug('Making a GET API call to {}'.format(endpoint))
         r = requests.get(urljoin(current_app.config['API_BASE'], endpoint),
                          cookies=self.get_cookie(),
                          verify=current_app.config['SSL_VERIFY'])
         self._update_user_cookie(r)
+        if r.status_code != 200:
+                current_app.logger.error(f'API call to {endpoint} failed, status code: {r.status_code},'
+                                        f'message: {r.content}')
+        else:
+            current_app.logger.debug('Response:{}'.format(r.content))
         return r
 
     def api_post(self, endpoint: str, payload: str) -> requests:
+        current_app.logger.debug('Making a GET API call to {}'.format(endpoint))
+        current_app.logger.debug('Payload: {}'.format(payload))
         r = requests.post(urljoin(current_app.config['API_BASE'], endpoint),
                           cookies=self.get_cookie(),
                           verify=current_app.config['SSL_VERIFY'],
                           json=payload)
         self._update_user_cookie(r)
+        if r.status_code != 200:
+                current_app.logger.error(f'API call to {endpoint} failed, status code: {r.status_code},'
+                                        f'message: {r.content}')
+        else:
+            current_app.logger.debug('Response:{}'.format(r.content))
         return r
 
     def _populate_user_info(self):
