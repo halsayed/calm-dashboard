@@ -65,6 +65,5 @@ def project_meter (user: User):
         current_app.logger.debug('project_meter: utilized_vcpu={}'.format(meter['utilized_vcpu']))
         meter['utilized_vcpu_percentage']=round((meter['utilized_vcpu']/meter['reserved_vcpu'])*100)
         current_app.logger.debug('project_meter: utilized_vcpu_percentage={}'.format(meter['utilized_vcpu_percentage']))
-        current_app.logger.debug('project_meter: Policy Engine not active cannot fetch Quota')
     return meter
  
