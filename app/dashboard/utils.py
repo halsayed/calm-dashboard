@@ -2,6 +2,7 @@ from datetime import datetime
 from app.auth.models import User, user_loader
 from flask import current_app
 
+
 def list_deployed_apps(user: User) -> list:
     """
     Returns a list of deployed application
@@ -25,7 +26,8 @@ def list_deployed_apps(user: User) -> list:
 
     return apps
 
-def project_meter (user: User):
+
+def project_meter(user: User):
     """
     Returns project meter details
     :param user:
@@ -45,7 +47,7 @@ def project_meter (user: User):
         meter['enabled']='false'
     else:
         meter['enabled']='true'
-        meter['reserved_disk']=round(int(r.json()['entities'][0]['status']['resources']['reserved']['disk'])/1024/1024/1024)
+        meter['reserved_disk']=round(int(r.json()['entities'][0]['status']['resources']['reserved'].get('disk', 1))/1024/1024/1024)
         current_app.logger.debug('project_meter: reserved_disk={}'.format(meter['reserved_disk']))
         meter['utilized_disk']=round(int(r.json()['entities'][0]['status']['resources']['utilized']['disk'])/1024/1024/1024)
         current_app.logger.debug('project_meter: utilized_disk={}'.format(meter['utilized_disk']))
