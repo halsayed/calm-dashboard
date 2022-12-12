@@ -1,7 +1,7 @@
 server {
     listen 8080;
 
-    location ~ ^/(console/lib/noVNC|vnc/vm|api/nutanix/v3/vms|api/nutanix/v3/users)/ {
+    location ~ ^/(console/lib|console/lib/noVNC|vnc/vm|api/nutanix/v3/vms|api/nutanix/v3/users)/ {
         if ($http_cookie !~* "NTNX_IGW_SESSION") {
             return 301 https://$host:$server_port/;
         }
@@ -10,6 +10,7 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "Upgrade";
         proxy_set_header Host $host;
+
     }
 
     location / {

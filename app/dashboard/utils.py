@@ -40,8 +40,13 @@ def project_meter(user: User):
 
     r = user.api_post('meter/projects/list', payload)
     meter = dict()
+    current_app.logger.debug(r.status_code)
     ##If no Meter-Data available no qouta is set
     current_app.logger.debug('project_meter: response={}'.format(r.json()))
+    if r.status_code==404:
+        current_app.logger.debug('project_meter: Policy Engine not active, no Quota set')
+        meter['enabled']='false'
+        return meter
     if r.json()['entities']==[]:
         current_app.logger.debug('project_meter: Policy Engine active, no Quota set')
         meter['enabled']='false'
